@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/cnlubo/go-docker-search/utils"
-	"github.com/cnlubo/go-docker-search/version"
 	"github.com/gookit/color"
 	"github.com/spf13/cobra"
 )
@@ -58,8 +57,8 @@ func (v *VersionCommand) runVersion() error {
 	if err != nil {
 		utils.ExitN(utils.Err, "failed to get system version:"+err.Error(), 1)
 	}
-	banner, _ := base64.StdEncoding.DecodeString(version.BannerBase64)
-	fmt.Printf(color.FgLightGreen.Render(versionTpl), banner, version.Appname, version.Version, version.GitHub, result.Os, result.Arch, result.GoVersion, result.BuildTime, result.GitCommit)
+	banner, _ := base64.StdEncoding.DecodeString(utils.BannerBase64)
+	fmt.Printf(color.FgLightGreen.Render(versionTpl), banner, utils.AppName, utils.AppVersion, utils.GitHub, result.Os, result.Arch, result.GoVersion, result.BuildTime, result.GitCommit)
 
 	return nil
 }
