@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"github.com/cnlubo/go-docker-search/version"
+	version "github.com/cnlubo/go-docker-search/utils"
 	"net"
 	"os"
 	"os/exec"
@@ -114,7 +114,7 @@ func Version() (SystemVersion, error) {
 
 	return SystemVersion{
 		Name:      version.Appname,
-		Version:   version.Version,
+		Version:   version.AppVersion,
 		GoVersion: runtime.Version(),
 		Arch:      runtime.GOARCH,
 		Os:        runtime.GOOS,
