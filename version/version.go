@@ -1,4 +1,4 @@
-package utils
+package version
 
 // Version package values is auto-generated, the following values will be overwrited at build time.
 var (
