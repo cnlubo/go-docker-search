@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	version "github.com/cnlubo/go-docker-search/utils"
+	"github.com/cnlubo/go-docker-search/utils"
 	"net"
 	"os"
 	"os/exec"
@@ -113,13 +113,13 @@ type SystemVersion struct {
 func Version() (SystemVersion, error) {
 
 	return SystemVersion{
-		Name:      version.Appname,
-		Version:   version.AppVersion,
+		Name:      utils.Appname,
+		Version:   utils.AppVersion,
 		GoVersion: runtime.Version(),
 		Arch:      runtime.GOARCH,
 		Os:        runtime.GOOS,
-		BuildTime: version.BuildTime,
-		GitCommit: version.GitCommit,
+		BuildTime: utils.BuildTime,
+		GitCommit: utils.GitCommit,
 	}, nil
 }
 
