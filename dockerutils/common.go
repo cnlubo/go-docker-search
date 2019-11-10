@@ -3,8 +3,8 @@ package dockerutils
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/cnlubo/go-docker-search/utils"
 	"github.com/gookit/color"
+	"go-docker-search/version"
 )
 
 type Environment struct {
@@ -20,6 +20,6 @@ var logo = `%s
 
 func Displaylogo() {
 
-	banner, _ := base64.StdEncoding.DecodeString(utils.BannerBase64)
-	fmt.Printf(color.FgLightGreen.Render(logo), banner, utils.Appname, utils.Version, color.FgMagenta.Render(utils.GitHub))
+	banner, _ := base64.StdEncoding.DecodeString(version.BannerBase64)
+	fmt.Printf(color.FgLightGreen.Render(logo), banner, version.AppName, version.AppVersion, color.FgMagenta.Render(version.GitHub))
 }

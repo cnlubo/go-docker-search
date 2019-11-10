@@ -1,13 +1,12 @@
 package main
 
 import (
-	"fmt"
+	_ "fmt"
 	"github.com/cnlubo/go-docker-search/dockerutils"
-	"github.com/cnlubo/go-docker-search/utils"
 	"github.com/gookit/color"
 	"github.com/mitchellh/go-homedir"
 	"github.com/olekukonko/tablewriter"
-	"github.com/pkg/errors"
+	_ "github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
@@ -147,40 +146,40 @@ func (c *Cli) AddCommand(parent, child Command) {
 
 func (c *Cli) initConfigDir() error {
 
-	if exists := utils.PathExist(c.Env.StorePath); !exists {
+	// if exists := utils.PathExist(c.Env.StorePath); !exists {
+	//
+	// 	// default context dir
+	// 	defCtxPath := filepath.Join(c.Env.StorePath, "contexts")
+	// 	if err := os.MkdirAll(filepath.Join(defCtxPath, "default"), 0755); err != nil {
+	// 		return errors.Wrap(err, "Create context dir error")
+	// 	}
 
-		// default context dir
-		defCtxPath := filepath.Join(c.Env.StorePath, "contexts")
-		if err := os.MkdirAll(filepath.Join(defCtxPath, "default"), 0755); err != nil {
-			return errors.Wrap(err, "Create context dir error")
-		}
+	// default cluster configfile
+	// if err := myssh.ClustersConfigExample(&c.Env).WriteTo(filepath.Join(defCtxPath, "default", "default.yaml")); err != nil {
+	// 	return errors.Wrap(err, "create cluster default.yaml error")
+	// }
 
-		// default cluster configfile
-		// if err := myssh.ClustersConfigExample(&c.Env).WriteTo(filepath.Join(defCtxPath, "default", "default.yaml")); err != nil {
-		// 	return errors.Wrap(err, "create cluster default.yaml error")
-		// }
+	// default SSH config file
+	// sshConfigFile := filepath.Join(defCtxPath, "default", "sshconfig")
+	// // create file
+	// if err := ioutil.WriteFile(sshConfigFile, []byte("Include include/*"+"\n"), 0777); err != nil {
+	// 	return errors.Wrap(err, "Create SSh config file error")
+	// }
+	// if err := os.MkdirAll(filepath.Join(defCtxPath, "default", "include"), 0755); err != nil {
+	// 	return errors.Wrap(err, "create default context include dir failed")
+	// }
 
-		// default SSH config file
-		// sshConfigFile := filepath.Join(defCtxPath, "default", "sshconfig")
-		// // create file
-		// if err := ioutil.WriteFile(sshConfigFile, []byte("Include include/*"+"\n"), 0777); err != nil {
-		// 	return errors.Wrap(err, "Create SSh config file error")
-		// }
-		// if err := os.MkdirAll(filepath.Join(defCtxPath, "default", "include"), 0755); err != nil {
-		// 	return errors.Wrap(err, "create default context include dir failed")
-		// }
+	// create symlink ~/.ssh/config
+	// if err := myssh.CreateSSHlink("default", &c.Env); err != nil {
+	// 	return errors.Wrap(err, "Create default symlink error")
+	// }
 
-		// create symlink ~/.ssh/config
-		// if err := myssh.CreateSSHlink("default", &c.Env); err != nil {
-		// 	return errors.Wrap(err, "Create default symlink error")
-		// }
+	// default main config file
+	// if err := myssh.MainConfigExample(&c.Env).WriteTo(filepath.Join(c.Env.StorePath, "main.yaml")); err != nil {
+	// 	return errors.Wrap(err, "create main.yaml failed")
+	// }
 
-		// default main config file
-		// if err := myssh.MainConfigExample(&c.Env).WriteTo(filepath.Join(c.Env.StorePath, "main.yaml")); err != nil {
-		// 	return errors.Wrap(err, "create main.yaml failed")
-		// }
-
-	}
+	// }
 
 	// skm key store
 	// Remove existing empty key store
@@ -212,32 +211,32 @@ func (c *Cli) initConfigDir() error {
 // initialize myssh
 func (c *Cli) Initialize() error {
 
-	op := &c.Option.Env
-	if err := c.initConfigDir(); err != nil {
-		return err
-	}
-
-	mainConfigFile := filepath.Join(op.StorePath, "main.yaml")
-	// load main config
-	if err := myssh.Main.LoadFrom(mainConfigFile); err != nil {
-		return errors.Wrap(err, "load mainConfigFile failed")
-	}
-
-	// check context
-	if len(myssh.Main.Contexts) == 0 {
-		return errors.New("get context failed")
-	}
-
-	// get current context
-	ctx, exists := myssh.Main.Contexts.FindContextByName(myssh.Main.Current)
-	if !exists {
-		return errors.New(fmt.Sprintf("current context: %s not found\n", myssh.Main.Current))
-	}
-	// load current context cluster
-	err := myssh.ClustersCfg.LoadFrom(ctx.ClusterConfig)
-	if err != nil {
-		return errors.Wrap(err, "load current cluster failed")
-	}
+	// op := &c.Option.Env
+	// if err := c.initConfigDir(); err != nil {
+	// 	return err
+	// }
+	//
+	// mainConfigFile := filepath.Join(op.StorePath, "main.yaml")
+	// // load main config
+	// if err := myssh.Main.LoadFrom(mainConfigFile); err != nil {
+	// 	return errors.Wrap(err, "load mainConfigFile failed")
+	// }
+	//
+	// // check context
+	// if len(myssh.Main.Contexts) == 0 {
+	// 	return errors.New("get context failed")
+	// }
+	//
+	// // get current context
+	// ctx, exists := myssh.Main.Contexts.FindContextByName(myssh.Main.Current)
+	// if !exists {
+	// 	return errors.New(fmt.Sprintf("current context: %s not found\n", myssh.Main.Current))
+	// }
+	// // load current context cluster
+	// err := myssh.ClustersCfg.LoadFrom(ctx.ClusterConfig)
+	// if err != nil {
+	// 	return errors.Wrap(err, "load current cluster failed")
+	// }
 
 	return nil
 
