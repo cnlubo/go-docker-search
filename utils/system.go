@@ -108,6 +108,9 @@ type SystemVersion struct {
 	Os string `json:"Os,omitempty"`
 
 	Version string `json:"Version,omitempty"`
+
+	Banner string `json:"Banner,omitempty"`
+	GitHub string `json:"GitHub,omitempty"`
 }
 
 func Version() (SystemVersion, error) {
@@ -120,6 +123,8 @@ func Version() (SystemVersion, error) {
 		Os:        runtime.GOOS,
 		BuildTime: version.BuildTime,
 		GitCommit: version.GitCommit,
+		Banner:    version.BannerBase64,
+		GitHub:    version.GitHub,
 	}, nil
 }
 
