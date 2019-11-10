@@ -2,7 +2,7 @@ package utils
 
 // Version package values is auto-generated, the following values will be overwrited at build time.
 var (
-	Appname      = "Docker-Search"
+	AppName      = "Docker-Search"
 	AppVersion   = "1.0.0"
 	BuildTime    = "unknown"
 	GitCommit    = "unknown"
