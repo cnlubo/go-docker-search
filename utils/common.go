@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/pkg/errors"
+	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -54,17 +55,17 @@ func PrintN(messageType string, message string) {
 	}
 	switch messageType {
 	case Info:
-		fmt.Printf("%s%s\n", color.FgYellow.Render(CheckSymbol), color.FgGreen.Render(message))
+		log.Printf("%s%s\n", color.FgYellow.Render(CheckSymbol), color.FgGreen.Render(message))
 	case Err:
-		fmt.Printf("%s%s\n", color.FgYellow.Render(CrossSymbol), color.FgRed.Render(message))
+		log.Printf("%s%s\n", color.FgYellow.Render(CrossSymbol), color.FgRed.Render(message))
 	case Warn:
-		fmt.Printf("%s%s\n", color.FgYellow.Render(ExclamSymbol), color.FgMagenta.Render(message))
+		log.Printf("%s%s\n", color.FgYellow.Render(ExclamSymbol), color.FgMagenta.Render(message))
 	case Inst:
-		fmt.Printf("%s%s\n", color.FgYellow.Render(ArrowSymbol), color.FgBlue.Render(message))
+		log.Printf("%s%s\n", color.FgYellow.Render(ArrowSymbol), color.FgBlue.Render(message))
 	case Uinst:
-		fmt.Printf("%s%s\n", color.FgYellow.Render(DeleteSymbol), color.FgWhite.Render(message))
+		log.Printf("%s%s\n", color.FgYellow.Render(DeleteSymbol), color.FgWhite.Render(message))
 	case None:
-		fmt.Printf("%s%s\n", color.FgYellow.Render(NoneSymbol), color.FgGray.Render(message))
+		log.Printf("%s%s\n", color.FgYellow.Render(NoneSymbol), color.FgGray.Render(message))
 
 	}
 }

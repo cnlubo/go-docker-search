@@ -55,3 +55,12 @@ func (d *DisplayTable) SetCenterSeparator(sep string) {
 func (d *DisplayTable) SetColumnAlignment(keys []int) {
 	d.w.SetColumnAlignment(keys)
 }
+func (d *DisplayTable) SetAutoFormatHeaders(auto bool) {
+	d.w.SetAutoFormatHeaders(auto)
+}
+func (d *DisplayTable) SetColWidth(width int) {
+	d.w.SetColWidth(width)
+}
+func (d *DisplayTable) SetAutoWrapText(auto bool) {
+	d.w.SetAutoWrapText(auto)
+}

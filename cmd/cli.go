@@ -1,12 +1,11 @@
 package main
 
 import (
-	_ "fmt"
-	"github.com/cnlubo/go-docker-search/dockerutils"
+	"github.com/cnlubo/go-docker-search/registry"
+	"github.com/cnlubo/go-docker-search/utils"
 	"github.com/gookit/color"
 	"github.com/mitchellh/go-homedir"
 	"github.com/olekukonko/tablewriter"
-	_ "github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
@@ -20,7 +19,7 @@ var (
 // Option uses to define the global options.
 type Option struct {
 	noColor bool
-	Env     dockerutils.Environment
+	Env     registry.Environment
 }
 
 type Cli struct {
@@ -33,7 +32,7 @@ func NewCli() *Cli {
 	cc := &Cli{
 		rootCmd: &cobra.Command{
 			Use:   "docker-search",
-			Short: "My ssh toolkit",
+			Short: "Docker-Search toolkit",
 			Long:  dockerSearchDesc,
 			// disable displaying auto generation tag in cli docs
 			DisableAutoGenTag: true,
@@ -54,7 +53,8 @@ func NewCli() *Cli {
 		}
 
 		if len(args) == 0 {
-			dockerutils.Displaylogo()
+			err := Displaylogo()
+			utils.CheckAndExit(err)
 		}
 
 		err := cc.Initialize()
@@ -75,39 +75,31 @@ func NewCli() *Cli {
 // SetFlags sets all global options.
 func (c *Cli) SetFlags() *Cli {
 
-	var defaultStorePath, defaultSkmPath, defaultSSHPath = os.Getenv("MYSSH_CONFIG_HOME"), os.Getenv("MKM_PATH"), os.Getenv("SSH_PATH")
+	var defaultStorePath, defaultDockerID, defaultDockerPass = os.Getenv("DOCKER_CONFIG_HOME"), os.Getenv("DOCKER_ID"), os.Getenv("DOCKER_PASS")
 
 	home, _ := homedir.Dir()
 
 	if len(defaultStorePath) == 0 {
-		defaultStorePath = filepath.Join(home, ".myssh")
+		defaultStorePath = filepath.Join(home, ".dockerhub")
 	} else {
 		if fp, _ := filepath.Rel("~", defaultStorePath); fp != "" {
 			defaultStorePath = filepath.Join(home, fp)
 		}
 	}
-	if len(defaultSkmPath) == 0 {
-		defaultSkmPath = filepath.Join(home, ".mkm")
-	} else {
-		if fp, _ := filepath.Rel("~", defaultSkmPath); fp != "" {
-			defaultSkmPath = filepath.Join(home, fp)
-		}
+	if len(defaultDockerID) == 0 {
+		defaultDockerID = ""
 	}
 
-	if len(defaultSSHPath) == 0 {
-		defaultSSHPath = filepath.Join(home, ".ssh")
-	} else {
-		if fp, _ := filepath.Rel("~", defaultSSHPath); fp != "" {
-			defaultSSHPath = filepath.Join(home, fp)
-		}
+	if len(defaultDockerPass) == 0 {
+		defaultDockerPass = ""
 	}
 
 	flags := c.rootCmd.PersistentFlags()
 	flags.BoolVar(&c.Option.noColor, "no-color", false, "Disable color when outputting message.")
-	flags.StringVar(&c.Option.Env.StorePath, "configPath", defaultStorePath, "Path where store myssh profiles.\ncan also be set by the MYSSH_CONFIG_HOME environment variable.")
-
-	// flags.StringVar(&c.Option.Env.SKMPath, "mkmPath", defaultSkmPath, "Path where myssh should store multi SSHKeys.\ncan also be set by the MKM_PATH environment variable.")
-	// flags.StringVar(&c.Option.Env.SSHPath, "sshPath", defaultSSHPath, "Path to .ssh folder.\ncan also be set by the SSH_PATH environment variable.")
+	flags.StringVar(&c.Option.Env.StorePath, "configPath", defaultStorePath, "Path where store profiles.\ncan also be set by the DOCKER_CONFIG_HOME environment variable.")
+	// flags.StringVar(&c.Option.Env.RegistryUrl, "registry", "https://index.docker.io", "Registry url.")
+	flags.StringVar(&c.Option.Env.DockerID, "dockerID", defaultDockerID, "docker hub login docker ID.")
+	flags.StringVar(&c.Option.Env.DockerPass, "dockerPass", defaultDockerPass, "docker hub login Password.")
 	return c
 }
 
@@ -144,99 +136,8 @@ func (c *Cli) AddCommand(parent, child Command) {
 	parentCmd.AddCommand(childCmd)
 }
 
-func (c *Cli) initConfigDir() error {
-
-	// if exists := utils.PathExist(c.Env.StorePath); !exists {
-	//
-	// 	// default context dir
-	// 	defCtxPath := filepath.Join(c.Env.StorePath, "contexts")
-	// 	if err := os.MkdirAll(filepath.Join(defCtxPath, "default"), 0755); err != nil {
-	// 		return errors.Wrap(err, "Create context dir error")
-	// 	}
-
-	// default cluster configfile
-	// if err := myssh.ClustersConfigExample(&c.Env).WriteTo(filepath.Join(defCtxPath, "default", "default.yaml")); err != nil {
-	// 	return errors.Wrap(err, "create cluster default.yaml error")
-	// }
-
-	// default SSH config file
-	// sshConfigFile := filepath.Join(defCtxPath, "default", "sshconfig")
-	// // create file
-	// if err := ioutil.WriteFile(sshConfigFile, []byte("Include include/*"+"\n"), 0777); err != nil {
-	// 	return errors.Wrap(err, "Create SSh config file error")
-	// }
-	// if err := os.MkdirAll(filepath.Join(defCtxPath, "default", "include"), 0755); err != nil {
-	// 	return errors.Wrap(err, "create default context include dir failed")
-	// }
-
-	// create symlink ~/.ssh/config
-	// if err := myssh.CreateSSHlink("default", &c.Env); err != nil {
-	// 	return errors.Wrap(err, "Create default symlink error")
-	// }
-
-	// default main config file
-	// if err := myssh.MainConfigExample(&c.Env).WriteTo(filepath.Join(c.Env.StorePath, "main.yaml")); err != nil {
-	// 	return errors.Wrap(err, "create main.yaml failed")
-	// }
-
-	// }
-
-	// skm key store
-	// Remove existing empty key store
-	// if ok, err := utils.IsEmpty(c.Env.SKMPath); ok {
-	// 	err = os.Remove(c.Env.SKMPath)
-	// 	if err != nil {
-	// 		return errors.Wrap(err, "Remove empty dir failed")
-	// 	}
-	// }
-
-	// // create key store
-	//
-	// if exits := utils.PathExist(c.Env.SKMPath); !exits {
-	// 	err := os.Mkdir(c.Env.SKMPath, 0755)
-	// 	if err != nil {
-	// 		return errors.Wrap(err, "Create ssh key store failed")
-	// 	}
-	//
-	// 	// Check & move existing keys into default folder
-	// 	err = myssh.MoveDefaultSSKey(&c.Env)
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// }
-
-	return nil
-}
-
-// initialize myssh
+// initialize
 func (c *Cli) Initialize() error {
-
-	// op := &c.Option.Env
-	// if err := c.initConfigDir(); err != nil {
-	// 	return err
-	// }
-	//
-	// mainConfigFile := filepath.Join(op.StorePath, "main.yaml")
-	// // load main config
-	// if err := myssh.Main.LoadFrom(mainConfigFile); err != nil {
-	// 	return errors.Wrap(err, "load mainConfigFile failed")
-	// }
-	//
-	// // check context
-	// if len(myssh.Main.Contexts) == 0 {
-	// 	return errors.New("get context failed")
-	// }
-	//
-	// // get current context
-	// ctx, exists := myssh.Main.Contexts.FindContextByName(myssh.Main.Current)
-	// if !exists {
-	// 	return errors.New(fmt.Sprintf("current context: %s not found\n", myssh.Main.Current))
-	// }
-	// // load current context cluster
-	// err := myssh.ClustersCfg.LoadFrom(ctx.ClusterConfig)
-	// if err != nil {
-	// 	return errors.Wrap(err, "load current cluster failed")
-	// }
 
 	return nil
 
@@ -250,7 +151,7 @@ func (c *Cli) NewAsciiTableDisplay() *DisplayTable {
 }
 
 // Print outputs the obj's fields.
-func (c *Cli) PrintTable(tableHead []string, headerColors []tablewriter.Colors, columnColors []tablewriter.Colors, rowData [][]string) {
+func (c *Cli) PrintTable(tableHead []string, headerColors []tablewriter.Colors, columnColors []tablewriter.Colors, rowData [][]string,defaultColWidth int) {
 
 	display := c.NewAsciiTableDisplay()
 	if tableHead != nil {
@@ -259,7 +160,8 @@ func (c *Cli) PrintTable(tableHead []string, headerColors []tablewriter.Colors, 
 			display.SetHeaderColor(headerColors...)
 		}
 	}
-
+	display.SetAutoFormatHeaders(true)
+	display.SetColWidth(defaultColWidth)
 	display.SetCenterSeparator(" ")
 	display.SetColumnSeparator(" ")
 	display.SetRowLine(false)

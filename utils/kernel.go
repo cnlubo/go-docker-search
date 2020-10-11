@@ -2,7 +2,6 @@ package utils
 
 import (
 	"fmt"
-	"golang.org/x/sys/unix"
 )
 
 // VersionInfo holds information about the kernel.
@@ -19,27 +18,27 @@ func (k *VersionInfo) String() string {
 }
 
 // GetKernelVersion returns the kernel version info.
-func GetKernelVersion() (*VersionInfo, error) {
-	var (
-		kernel, major, minor int
-		flavor               string
-	)
-
-	buf := unix.Utsname{}
-	err := unix.Uname(&buf)
-	if err != nil {
-		return nil, err
-	}
-	release := string(buf.Release[:])
-	parsed, _ := fmt.Sscanf(release, "%d.%d.%d-%s", &kernel, &major, &minor, &flavor)
-	if parsed < 3 {
-		return nil, fmt.Errorf("Can't parse kernel version, release: %s" + release)
-	}
-
-	return &VersionInfo{
-		Kernel: kernel,
-		Major:  major,
-		Minor:  minor,
-		Flavor: flavor,
-	}, nil
-}
+// func GetKernelVersion() (*VersionInfo, error) {
+// 	var (
+// 		kernel, major, minor int
+// 		flavor               string
+// 	)
+//
+// 	buf := unix.Utsname{}
+// 	err := unix.Uname(&buf)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	release := string(buf.Release[:])
+// 	parsed, _ := fmt.Sscanf(release, "%d.%d.%d-%s", &kernel, &major, &minor, &flavor)
+// 	if parsed < 3 {
+// 		return nil, fmt.Errorf("Can't parse kernel version, release: %s" + release)
+// 	}
+//
+// 	return &VersionInfo{
+// 		Kernel: kernel,
+// 		Major:  major,
+// 		Minor:  minor,
+// 		Flavor: flavor,
+// 	}, nil
+// }

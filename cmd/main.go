@@ -18,15 +18,9 @@ func main() {
 	base.Cmd().PersistentFlags().SortFlags = false
 
 	// Add all subCommands.
-	// cli.AddCommand(base, &KeyCommand{})
-	// cli.AddCommand(base, &CfgCommand{})
-	// cli.AddCommand(base, &ClusterCommand{})
-	// cli.AddCommand(base, &HostAliasCommand{})
-	// cli.AddCommand(base, &InstallCommand{})
-	// cli.AddCommand(base, &UninstallCommand{})
-	// cli.AddCommand(base, &BackupCommand{})
 	cli.AddCommand(base, &VersionCommand{})
-
+	cli.AddCommand(base, &DockerRepositoryCmd{})
+	cli.AddCommand(base, &RepoTagsCmd{})
 	// // add generate doc command
 	// cli.AddCommand(base, &GenDocCommand{})
 	err := cli.Run()
