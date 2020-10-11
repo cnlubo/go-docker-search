@@ -16,3 +16,5 @@ dist
 template
 .DS_Store
 vendor
+go.sun
+go_docker_search.exe
