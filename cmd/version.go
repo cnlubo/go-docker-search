@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/gookit/color"
 	"github.com/spf13/cobra"
-	// "github.com/cnlubo/go-docker-search/utils"
-	"go-docker-search/utils"
+	"github.com/cnlubo/go-docker-search/utils"
+	//"go-docker-search/utils"
 	// "go-docker-search/version"
 )
 

@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"github.com/gookit/color"
-	"go-docker-search/version"
+	"github.com/cnlubo/go-docker-search/version"
 )
 
 type Environment struct {
