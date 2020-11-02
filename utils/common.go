@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"encoding/base64"
 	"fmt"
+	"github.com/cnlubo/go-docker-search/version"
 	"github.com/gookit/color"
 	"github.com/pkg/errors"
 	"log"
@@ -279,4 +281,17 @@ func ParseConnect(connectStr string) (string, string, string) {
 		}
 	}
 	return u, hostname, port
+}
+
+var logo = `%s
+
+%s V%s
+%s
+
+`
+
+func Displaylogo() {
+
+	banner, _ := base64.StdEncoding.DecodeString(version.BannerBase64)
+	fmt.Printf(color.FgLightGreen.Render(logo), banner, version.AppName, version.AppVersion, color.FgMagenta.Render(version.GitHub))
 }
