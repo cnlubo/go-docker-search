@@ -4,13 +4,11 @@ import (
 	"fmt"
 	"github.com/Masterminds/semver"
 	"github.com/cnlubo/go-docker-search/registry"
-	_ "github.com/cnlubo/go-docker-search/registry"
 	"github.com/cnlubo/go-docker-search/utils"
 	"github.com/olekukonko/tablewriter"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"sort"
-	_ "sort"
 )
 
 var RepoTagsDesc = "Tool for image repository tags ..... "
