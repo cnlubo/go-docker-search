@@ -53,8 +53,8 @@ func NewCli() *Cli {
 		}
 
 		if len(args) == 0 {
-			err := Displaylogo()
-			utils.CheckAndExit(err)
+			utils.Displaylogo()
+			//utils.CheckAndExit(err)
 		}
 
 		err := cc.Initialize()
@@ -71,6 +71,8 @@ func NewCli() *Cli {
 
 	return cc
 }
+
+
 
 // SetFlags sets all global options.
 func (c *Cli) SetFlags() *Cli {

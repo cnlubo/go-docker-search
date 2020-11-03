@@ -27,7 +27,7 @@ func (cc *DockerRepositoryCmd) Init(c *Cli) {
 		Long:    DockerRepositoryDesc,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := utils.ArgumentsCheck(len(args), -1, 0); err != nil {
-				_ = Displaylogo()
+				utils.Displaylogo()
 				_ = cc.Cmd().Help()
 				fmt.Println()
 				return errors.WithMessage(err, "args input failed")
